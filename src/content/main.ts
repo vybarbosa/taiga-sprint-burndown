@@ -107,32 +107,19 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       totalStories = countTotal;
       // =-=-=-=-= Members info =-=-=-=-=
 
-      // Título da produtividade dos membros
+      // Título da tabela de membros
       const membersInfoTitle = document.createElement(
         "h3"
       ) as HTMLHeadingElement;
-      membersInfoTitle.textContent = "Produtividade Membros";
+      membersInfoTitle.className = "sprint-burndown__title";
+      membersInfoTitle.textContent = "Membros";
 
-      membersInfoTitle.style.color = "#008aa8";
-      membersInfoTitle.style.padding = "0 0 0.5rem";
-      membersInfoTitle.style.fontFamily = "Ubuntu-Medium";
-      membersInfoTitle.style.fontSize = "22.4px";
-
-      // Tabela da produtividade dos membros
+      // Tabela da tabela de membros
       const membersInfoTable = document.createElement("table");
-      membersInfoTable.id = "members-info";
-
+      membersInfoTable.className = "sprint-burndown__members";
       fillMembersTable(membersInfoTable, aggregatedMembersInfo);
-      membersInfoTable.style.color = "#4c566a";
-      membersInfoTable.style.fontSize = "14px";
-      membersInfoTable.style.borderCollapse = "collapse";
 
-      membersInfoTable.querySelectorAll("td").forEach((td) => {
-        td.style.paddingRight = ".5rem";
-        td.style.paddingBottom = ".5rem";
-      });
-
-      // Div interna que contém o título e a tabela da produtividade dos membros
+      // Div interna que contém o título e a tabela da tabela de membros
       const membersInfoWrapper = document.createElement(
         "div"
       ) as HTMLDivElement;
@@ -143,22 +130,17 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       const totalTasksTitle = document.createElement(
         "h3"
       ) as HTMLHeadingElement;
-      totalTasksTitle.style.color = "#008aa8";
-      totalTasksTitle.style.padding = "0 0 0.5rem";
-      totalTasksTitle.style.fontFamily = "Ubuntu-Medium";
-      totalTasksTitle.style.fontSize = "22.4px";
+      totalTasksTitle.className = "sprint-burndown__title";
 
       const totalTasksWrapper = document.createElement("div");
       const totalTasksList = document.createElement("ul");
-      totalTasksList.style.display = "flex";
+      totalTasksList.className = "sprint-burndown__total-tasks--list";
+
       totalTasksList.style.flexDirection = "column";
-      totalTasksList.style.gap = ".5rem";
-      totalTasksList.style.maxHeight = "100px";
+      totalTasksList.style.gap = "1rem";
       totalTasksList.style.flexWrap = "wrap";
-      totalTasksList.style.maxHeight = "100px";
-      totalTasksList.style.fontSize = "14px";
       totalTasksList.style.color = "#4c566a";
-      totalTasksWrapper.id = "qtd-total";
+
       const totalOfTotalTypes = Object.values(totalTypes).reduce(
         (acc: number, curr: number) => acc + curr,
         0
@@ -176,21 +158,19 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         .map(([key, value]) => `${key}: ${value}`)
         .join(", ")})`;
 
-      // Div interna que contém a produtividade dos membros e as tasks
+      // Div interna que contém a tabela de membros e tasks
       const membersAndTasksInternalWrapper = document.createElement("div");
+      membersAndTasksInternalWrapper.className = 'sprint-burndown__members-internal-wrapper'
       membersAndTasksInternalWrapper.appendChild(membersInfoWrapper);
-      membersAndTasksInternalWrapper.style.backgroundColor = "#fff";
-      membersAndTasksInternalWrapper.style.borderRadius = "3px";
+
       membersAndTasksInternalWrapper.style.padding = "1rem";
       membersAndTasksInternalWrapper.style.display = "flex";
       membersAndTasksInternalWrapper.style.gap = "5rem";
       membersAndTasksInternalWrapper.appendChild(totalTasksWrapper);
 
-      // Div externa que contém a produtividade dos membros e as tasks
+      // Div externa que contém a tabela de membros e tasks
       const membersAndTasksExternalWrapper = document.createElement("div");
-      membersAndTasksExternalWrapper.id = 'members-info-wrapper';
-      membersAndTasksExternalWrapper.style.padding = "1rem";
-      membersAndTasksExternalWrapper.style.backgroundColor = "#f9f9fb";
+      membersAndTasksExternalWrapper.className = 'sprint-burndown__members-external-wrapper';
       membersAndTasksExternalWrapper.appendChild(
         membersAndTasksInternalWrapper
       );

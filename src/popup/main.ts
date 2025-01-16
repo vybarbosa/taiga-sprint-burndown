@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
       `TOTAL (TASKS): ${totalTasks}\n`+
       `QTD. CLOSED: ${totalClosed}\n`+
       `QTD. NEW: ${totalNew}\n\n`+
-      `STORIES:\n${totalStories}\n\n`+
+      `STORIES:\n${totalStories}\n`+
       `PRODUTIVIDADE DA SQUAD: \n${renderMembersInfos(aggregatedMembersInfo)}`
     ;
         navigator.clipboard.writeText(allFields);

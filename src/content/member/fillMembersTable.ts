@@ -18,10 +18,10 @@ export function fillMembersTable(
     memberCell.textContent = `${member.member}: `;
     row.appendChild(memberCell);
     const hoursCell = document.createElement("td");
-    hoursCell.textContent = `${member.hours}H`;
+    hoursCell.textContent = `${member.closedHours}H / ${member.assignedHours}H`;
     row.appendChild(hoursCell);
     const tasksCell = document.createElement("td");
-    tasksCell.textContent = `(${member.tasks.toString()} tasks)`;
+    tasksCell.textContent = `(${member.closedTasks.toString()} / ${member.assignedTasks.toString()} tasks) | ${member.hoursPerDay}H Day`;
     row.appendChild(tasksCell);
     table.appendChild(row);
   });

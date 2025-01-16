@@ -16,5 +16,15 @@ export default defineConfig({
       }
     },
   },
+  plugins: [
+    viteStaticCopy({
+      targets: [
+        {
+          src: 'src/content/content.css', // Caminho do CSS no projeto
+          dest: 'assets', // Caminho onde será gerado em `dist`
+        },
+      ],
+    }),
+  ],
   base: "./"
 });
