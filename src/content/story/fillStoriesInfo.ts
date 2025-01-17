@@ -11,7 +11,7 @@ export function fillStoriesInfo(stories: Story[]) {
     const title = taskboardCard.querySelector(".us-title") as HTMLElement;
     const story = stories.find((story: Story) => story.name == title.innerText);
     const storyData = document.createElement("ul");
-    storyData.id = "stories";
+    storyData.className = "sprint-burndown__stories-info";
     storyData.innerHTML = `<li>TOTAL (HR): ${checkNaN(
       story?.totalHR
     )} (${checkNaN(story?.remainingHours)} - ${checkNaN(
@@ -26,23 +26,8 @@ export function fillStoriesInfo(stories: Story[]) {
     storyData.style.fontSize = "10px";
     storyData.style.paddingTop = "1rem";
     storyData.style.color = "#4c566a";
-    const storyRow = taskboardCard.parentElement.parentElement;
     totalStories +=
       story?.name.replace("\n", " ") + "\n" + storyData.innerText + "\n\n";
-    if (storyRow.classList.contains("row-fold")) {
-      storyData.style.display = "none";
-    } else {
-      storyData.style.display = "block";
-    }
-    document
-      .querySelectorAll(".folding-actions")
-      [index].addEventListener("click", () => {
-        if (!storyRow.classList.contains("row-fold")) {
-          storyData.style.display = "none";
-        } else {
-          storyData.style.display = "block";
-        }
-      });
   });
 
   return {

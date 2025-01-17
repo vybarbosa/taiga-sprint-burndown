@@ -6,13 +6,10 @@ export function fillMembersTable(
 ) {
   membersInfo.forEach((member) => {
     const row = document.createElement("tr");
-    row.style.display = "flex";
-    row.style.alignItems = "center";
     const memberImageCell = document.createElement("td");
     memberImageCell.innerHTML = `<img src="${member.img}"
     alt="${member.member}"
-    title="${member.member}"
-    style="border: 2px solid #fff; border-radius: 15px; display: flex; height: 30px; width: 30px;"/>`;
+    title="${member.member}"/>`;
     row.appendChild(memberImageCell);
     const memberCell = document.createElement("td");
     memberCell.textContent = `${member.member}: `;
@@ -21,7 +18,9 @@ export function fillMembersTable(
     hoursCell.textContent = `${member.closedHours}H / ${member.assignedHours}H`;
     row.appendChild(hoursCell);
     const tasksCell = document.createElement("td");
-    tasksCell.textContent = `(${member.closedTasks.toString()} / ${member.assignedTasks.toString()} tasks) | ${member.hoursPerDay}H Day`;
+    tasksCell.textContent = `(${member.closedTasks.toString()} / ${member.assignedTasks.toString()} tasks) | ${
+      member.hoursPerDay
+    }H Day`;
     row.appendChild(tasksCell);
     table.appendChild(row);
   });

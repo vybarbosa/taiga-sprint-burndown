@@ -70,8 +70,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     let totalTasks = "";
     let totalStories = "";
     let membersInfoText = "";
-    if (mainTaskboard && summary) {
-      clearOldData(mainTaskboard, summary);
+    if (summary) {
+      clearOldData(summary);
 
       const mainSummaryStats = summary.querySelector(".main-summary-stats");
 
@@ -138,6 +138,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
       totalTasksList.style.flexDirection = "column";
       totalTasksList.style.gap = "1rem";
+      totalTasksList.style.rowGap = ".5rem";
       totalTasksList.style.flexWrap = "wrap";
       totalTasksList.style.color = "#4c566a";
 

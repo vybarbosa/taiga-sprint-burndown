@@ -23,7 +23,7 @@
         "content.js",
         "popup.js"
       ],
-      "css": ["assets/content.css"]
+      "css": ["assets/index.css"]
     }
   ],
   "action": {
