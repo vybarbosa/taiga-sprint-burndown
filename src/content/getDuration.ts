@@ -11,14 +11,17 @@ export function getDuration() {
 
 export function getDifferenceInDaysFromToday() {
   const duration = getDuration();
-  const [startDateString] = duration.split(" to ");
+  const [startDateString, endDateString] = duration.split(" to ");
   const today = new Date();
 
   const startDate = new Date(startDateString);
+  const endDate = new Date(endDateString);
+
+  const limitDate = endDate < today ? endDate : today;
 
   let workingDays = 0;
 
-  for (let date = new Date(startDate); date <= today; date.setDate(date.getDate() + 1)) {
+  for (let date = new Date(startDate); date <= limitDate; date.setDate(date.getDate() + 1)) {
     const dayOfWeek = date.getDay();
     if (dayOfWeek !== 0 && dayOfWeek !== 6) {
       workingDays++;
