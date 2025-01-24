@@ -14,9 +14,9 @@ export interface Story {
   totalClosedNewHR: string;
 }
 
-export interface SumStorys {
+export interface SumStories {
   totalHR: string;
-  totalTypes: any;
+  totalTypes: Record<string, number>;
   totalClosed: number;
   totalNew: number;
   totalClosedHR: string;

@@ -1,5 +1,10 @@
+import { GetDataResponse } from "../../interfaces/GetDataResponse";
 import { fetchDataAndCopyToClipboard } from "./helpers/fetchDataAndCopyToClipboard";
 
+/**
+ * Função para ativar o botão de copiar, habilitando-o.
+ * @return Retorna o status de habilitação do botão (sempre retorna true após habilitar).
+ */
 function activateCopyButton() {
   if (document.getElementById("copyData")) {
     return ((document.getElementById("copyData") as HTMLInputElement).disabled =
@@ -36,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
       totalNewHR,
       totalTasks,
       totalStories,
-    }) => {
+    }: GetDataResponse) => {
       (
         document.getElementById("copyData") as HTMLInputElement
       ).addEventListener("click", () => {

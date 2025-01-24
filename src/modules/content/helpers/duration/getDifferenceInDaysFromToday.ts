@@ -1,7 +1,12 @@
 import { getDuration } from "./getDuration";
 
-export function getDifferenceInDaysFromToday() {
-  const duration = getDuration();
+/**
+ * Função para calcular a diferença em dias úteis entre a data de hoje e uma data limite.
+ *
+ * @param { string } duration O texto de duração do sprint nativo do Taiga
+ * @return { number } O número de dias úteis entre hoje e a data limite.
+ */
+export function getDifferenceInDaysFromToday(duration) {
   const [startDateString, endDateString] = duration.split(" to ");
   const today = new Date();
 

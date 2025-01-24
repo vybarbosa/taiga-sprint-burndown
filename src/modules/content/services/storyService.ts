@@ -1,17 +1,23 @@
-import { Story, SumStorys } from "../../../interfaces/Story";
+import { Story, SumStories } from "../../../interfaces/Story";
+import { checkNaN } from "../helpers/checkNaN";
 import { calculatePercentage } from "../helpers/percentage/calculatePercentage";
 import { parseTime } from "../helpers/time/parseTime";
 import { subtractTimes } from "../helpers/time/subtractTimes";
 import { sumTimes } from "../helpers/time/sumTimes";
 import { taskService } from "./taskService";
 
-function checkNaN(hr: string) {
-  return hr?.includes("NaN") ? "NOT FOUND" : hr;
-}
-
+/**
+ * Serviço responsável por gerenciar informações relacionadas às stories.
+ */
 export const storyService = {
   /**
-   * Fills the stories information in the DOM and calculates total story details.
+   * Preenche as informações das stories no taskboard.
+   *
+   * Esta função localiza as stories no DOM, associa-as aos dados fornecidos e adiciona
+   * informações detalhadas sobre cada story diretamente no elemento do título da story.
+   *
+   * @param { Story[] } stories - Lista de stories contendo informações detalhadas (como horas e tarefas).
+   * @return Um objeto contendo o resumo textual de todas as stories.
    */
   fillStoriesInfo(stories: Story[]) {
     let totalStories = "";
@@ -44,7 +50,12 @@ export const storyService = {
   },
 
   /**
-   * Retrieves all stories from the DOM and calculates their information.
+   * Obtém a lista de stories do taskboard.
+   *
+   * Esta função extrai os dados das stories a partir do DOM, calcula métricas e
+   * retorna uma lista com os detalhes de cada story.
+   *
+   * @return { Story[] } Uma lista de objetos representando as stories do taskboard.
    */
   getStories(): Story[] {
     try {
@@ -91,16 +102,23 @@ export const storyService = {
     }
   },
 
+
   /**
-   * Sums up all the story information for aggregated reporting.
+   * Soma as métricas de várias stories.
+   * 
+   * Esta função calcula os totais de horas, tarefas e tipos de tarefas 
+   * a partir de uma lista de stories.
+   * 
+   * @param { Story[] } stories - Lista de stories para cálculo de métricas totais.
+   * @return { SumStories } Um objeto contendo os totais agregados das stories.
    */
-  sumStories(stories: Story[]): SumStorys {
+  sumStories(stories: Story[]): SumStories {
     let totalHR = "0.00";
     let totalClosedHR = "0.00";
     let totalClosed = 0;
     let totalNew = 0;
     let totalNewHR = "0.00";
-    const totalTypes: Record<string, string> = {};
+    const totalTypes: Record<string, number> = {};
 
     stories.forEach((story) => {
       totalHR = sumTimes(totalHR, story.totalHR);
@@ -109,7 +127,7 @@ export const storyService = {
       totalNew += story.totalNew;
       totalNewHR = sumTimes(totalNewHR, story.totalNewHR);
       Object.keys(story.totalTypes).forEach((type) => {
-        totalTypes[type] = (totalTypes[type] || 0) + story.totalTypes[type];
+        totalTypes[type] = (totalTypes[type] || 0) + Number(story.totalTypes[type]);
       });
     });
 
@@ -121,5 +139,5 @@ export const storyService = {
       totalClosedHR,
       totalNewHR,
     };
-  }
+  },
 };

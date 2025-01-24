@@ -1,14 +1,18 @@
 import { MemberTaskInfo } from "../../../interfaces/Member";
 import { Story } from "../../../interfaces/Story";
 import { getDifferenceInDaysFromToday } from "../helpers/duration/getDifferenceInDaysFromToday";
+import { getDuration } from "../helpers/duration/getDuration";
 import { formatTime } from "../helpers/time/formatTime";
 import { parseTime } from "../helpers/time/parseTime";
 
+/**
+ * Serviço responsável por buscar e agregar infomações dos membros.
+ */
 export const memberService = {
   /**
-   * Agrega informações dos membros com base nas tarefas nas histórias.
-   * @param stories Lista de histórias que contém as tarefas.
-   * @returns Informações agregadas sobre os membros.
+   * Agrega informações dos membros com base nas tarefas das stories.
+   * @param stories Lista de stories que contém as tarefas.
+   * @returns { MemberTaskInfo[] } Informações agregadas sobre os membros.
    */
   aggregateMembersInfo(stories: Story[]): MemberTaskInfo[] {
     const memberMap: {
@@ -21,14 +25,13 @@ export const memberService = {
         closedTasks: number;
       };
     } = {};
-    const differenceInDaysFromToday = getDifferenceInDaysFromToday();
+    const duration = getDuration()
+    const differenceInDaysFromToday = getDifferenceInDaysFromToday(duration);
 
-    // Itera pelas histórias e tarefas para agrupar informações dos membros
     stories.forEach((story) => {
       story.tasks.forEach((task) => {
         const { assignedTo, hours, isClosed, memberImageUrl } = task;
 
-        // Ignorar tarefas não atribuídas
         if (assignedTo !== "Not assigned") {
           if (!memberMap[assignedTo]) {
             memberMap[assignedTo] = {
@@ -41,7 +44,6 @@ export const memberService = {
             };
           }
 
-          // Atualiza as informações do membro
           memberMap[assignedTo].assignedHours += parseTime(hours);
           memberMap[assignedTo].assignedTasks += 1;
           if (isClosed) {
@@ -52,7 +54,6 @@ export const memberService = {
       });
     });
 
-    // Ordena os membros por horas fechadas, seguido por tarefas fechadas
     return Object.values(memberMap)
       .sort((a, b) => {
         const hoursDifference = b.closedHours - a.closedHours;

@@ -13,7 +13,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     layoutService.clearElements();
     const squadName = squadService.getSquadName();
     const duration = getDuration();
-    const storys = storyService.getStories();
+    const stories = storyService.getStories();
     const {
       totalHR,
       totalTypes,
@@ -21,8 +21,8 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
       totalNew,
       totalClosedHR,
       totalNewHR,
-    } = storyService.sumStories(storys);
-    const aggregatedMembersInfo = memberService.aggregateMembersInfo(storys);
+    } = storyService.sumStories(stories);
+    const aggregatedMembersInfo = memberService.aggregateMembersInfo(stories);
     const totalPercent = calculatePercentage(
       parseTime(totalClosedHR),
       parseTime(totalHR)
@@ -31,7 +31,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
 
     const remainingHours = subtractTimes(totalClosedHR, totalHR);
 
-    const { countTotal } = storyService.fillStoriesInfo(storys);
+    const { countTotal } = storyService.fillStoriesInfo(stories);
     const totalStories = countTotal;
 
     const totalTasks = taskService.getTotalTasksByType(totalTypes);
@@ -51,14 +51,12 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     sendResponse({
       squadName,
       duration,
-      storys,
       totalHR,
-      totalTypes,
+      totalClosedHR,
       totalClosed,
       totalNew,
-      totalClosedHR,
-      totalPercent,
       remainingHours,
+      totalPercent,
       aggregatedMembersInfo,
       totalNewHR,
       totalTasks,

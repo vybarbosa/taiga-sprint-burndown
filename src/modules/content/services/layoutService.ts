@@ -1,19 +1,16 @@
 import { MemberTaskInfo } from "../../../interfaces/Member";
+import { SummaryData } from "../../../interfaces/SummaryData";
 import { checkNaN } from "../helpers/checkNaN";
 
-interface SummaryData {
-  totalClosedHR: string;
-  totalHR: string;
-  remainingHours: string;
-  totalNewHR: string;
-  totalNew: number;
-  duration: string;
-  totalClosed: number;
-  aggregatedMembersInfo: MemberTaskInfo[];
-  totalTypes: any;
-}
-
+/**
+ * Serviço responsável por manipular elementos do layout da interface.
+ */
 export const layoutService = {
+
+
+  /**
+   * Remove elementos específicos do DOM pelo ID para limpar os dados da extensão caso já estejam na tela.
+   */
   clearElements() {
     const idsToRemove = [
       "#duration",
@@ -34,6 +31,11 @@ export const layoutService = {
       .forEach((element) => element.remove());
   },
 
+
+  /**
+   * Limpa o conteúdo da div .large-summary nativa do Taiga e move elementos necessários para a área correspondente.
+   * @param summary Elemento HTML que representa a div .large-summary.
+   */
   clearSummary(summary: HTMLDivElement) {
     summary.classList.add("active");
     const toggleAnalyticsWrapper = summary.querySelector(
@@ -55,6 +57,11 @@ export const layoutService = {
     });
   },
 
+
+  /**
+   * Atualiza a barra de progresso com a porcentagem fornecida.
+   * @param percent Porcentagem a ser exibida na barra de progresso.
+   */
   updateProgressBar(percent: string) {
     const progressBarWrapper = document.querySelector(
       ".summary-progress-wrapper"
@@ -72,6 +79,11 @@ export const layoutService = {
     }
   },
 
+
+  /**
+   * Renderiza todas as informações da extensão da interface.
+   * @param summaryData Objeto contendo os dados necessários para exibição das informações.
+   */
   renderSummary({
     totalClosedHR,
     totalHR,
@@ -96,7 +108,6 @@ export const layoutService = {
 
     const mainSummaryStats = summary.querySelector(".main-summary-stats");
 
-    // Adiciona informações de resumo ao DOM
     layoutService.createTotalHrWrapper(
       mainSummaryStats,
       totalClosedHR,
@@ -108,13 +119,11 @@ export const layoutService = {
     layoutService.createQtdNewWrapper(mainSummaryStats, totalNew);
     layoutService.createDurationWrapper(summary, duration);
 
-    // Preenche informações de tasks e membros
     const membersAndTasksWrapper = layoutService.createMembersAndTasksWrapper(
       aggregatedMembersInfo,
       totalTypes
     );
 
-    // Insere o wrapper na taskboard
     const taskboardInner = document.querySelector(".taskboard-inner");
     taskboardInner.insertBefore(
       membersAndTasksWrapper,
@@ -122,26 +131,29 @@ export const layoutService = {
     );
   },
 
+
+  /**
+   * Cria um wrapper que agrupa informações de membros e tarefas.
+   * @param aggregatedMembersInfo Informações agregadas sobre os membros.
+   * @param totalTypes Total de tipos de tarefas agrupadas.
+   * @returns { HTMLDivElement } Elemento HTML contendo o agrupamento de informações.
+   */
   createMembersAndTasksWrapper: (
-    aggregatedMembersInfo: any,
+    aggregatedMembersInfo: MemberTaskInfo[],
     totalTypes: Record<string, number>
   ) => {
-    // Cria o título e tabela de membros
     const membersInfoWrapper = layoutService.createMembersInfoWrapper(
       aggregatedMembersInfo
     );
 
-    // Cria o título e lista de tarefas
     const totalTasksWrapper = layoutService.createTotalTasksWrapper(totalTypes);
 
-    // Wrapper interno que agrupa membros e tarefas
     const internalWrapper = document.createElement("div");
     internalWrapper.className = "sprint-burndown__members-internal-wrapper";
 
     internalWrapper.appendChild(membersInfoWrapper);
     internalWrapper.appendChild(totalTasksWrapper);
 
-    // Wrapper externo
     const membersAndTasksWrapper = document.createElement("div");
     membersAndTasksWrapper.className =
       "sprint-burndown__members-external-wrapper";
@@ -151,7 +163,13 @@ export const layoutService = {
     return membersAndTasksWrapper;
   },
 
-  createMembersInfoWrapper: (aggregatedMembersInfo: any) => {
+
+  /**
+   * Cria um wrapper contendo informações dos membros.
+   * @param aggregatedMembersInfo Informações agregadas sobre os membros.
+   * @returns { HTMLDivElement } Elemento HTML contendo os dados formatados.
+   */
+  createMembersInfoWrapper: (aggregatedMembersInfo: MemberTaskInfo[]) => {
     const title = document.createElement("h3");
     title.className = "sprint-burndown__title";
     title.textContent = "Membros";
@@ -167,6 +185,12 @@ export const layoutService = {
     return wrapper;
   },
 
+
+  /**
+   * Cria um wrapper contendo a lista de tarefas por tipo.
+   * @param totalTypes Objeto com os tipos de tarefas e suas quantidades.
+   * @returns { HTMLDivElement } Elemento HTML contendo a lista formatada.
+   */
   createTotalTasksWrapper: (totalTypes: Record<string, number>) => {
     const title = document.createElement("h3");
     title.className = "sprint-burndown__title";
@@ -191,8 +215,13 @@ export const layoutService = {
     return wrapper;
   },
 
+
+  /**
+   * Cria e insere o wrapper que exibe o total de horas marcadas com new (totalNewHR).
+   * @param mainSummaryStats Elemento do DOM onde o wrapper será inserido.
+   * @param totalNewHR Total de horas new a serem exibidas.
+   */
   createTotalNewHRWrapper(mainSummaryStats: Element, totalNewHR: string) {
-    // =-=-=-=-= total New Hr =-=-=-=-=
     const newHrWrapper = document.createElement("div");
     newHrWrapper.className = "summary-stats";
     newHrWrapper.id = "qtd-new-hr";
@@ -207,13 +236,21 @@ export const layoutService = {
     mainSummaryStats.insertBefore(newHrWrapper, mainSummaryStats.childNodes[7]);
   },
 
+
+  /**
+   * Cria e insere o wrapper que exibe as horas totais (totalClosedHR / totalHR)
+   * e as horas restantes (remainingHours).
+   * @param mainSummaryStats Elemento do DOM onde o wrapper será inserido.
+   * @param totalClosedHR Total de horas marcadas com closed.
+   * @param totalHR Total de horas atribuídas.
+   * @param remainingHours Total de horas restantes.
+   */
   createTotalHrWrapper(
     mainSummaryStats: Element,
     totalClosedHR: string,
     totalHR: string,
     remainingHours: string
   ) {
-    // =-=-=-=-= Total Hr =-=-=-=-=
     const totalHrWrapper = document.createElement("div");
     totalHrWrapper.className = "summary-stats";
     const totalHrNumber = document.createElement("span");
@@ -234,6 +271,12 @@ export const layoutService = {
     );
   },
 
+
+  /**
+   * Cria e insere o wrapper que exibe o número total de novas tarefas (totalNew).
+   * @param mainSummaryStats Elemento do DOM onde o wrapper será inserido.
+   * @param totalNew Total de horas marcadas com new.
+   */
   createQtdNewWrapper(mainSummaryStats: Element, totalNew: number) {
     const qtdNewWrapper = document.createElement("div");
     qtdNewWrapper.className = "summary-stats";
@@ -252,6 +295,12 @@ export const layoutService = {
     );
   },
 
+
+  /**
+   * Cria e insere o wrapper que exibe a duração do sprint (duration).
+   * @param summary Elemento do DOM onde o wrapper será inserido.
+   * @param duration Duração do sprint.
+   */
   createDurationWrapper(summary: Element, duration: string) {
     const durationWrapper = document.createElement("div");
     durationWrapper.className =
@@ -264,6 +313,11 @@ export const layoutService = {
     summary.insertBefore(durationWrapper, summary.childNodes[0]);
   },
 
+
+  /**
+   * Atualiza o wrapper que exibe o número total de tarefas marcadas com closed.
+   * @param totalClosed Total de tarefas marcadas com closed.
+   */
   updateTotalClosedWrapper(totalClosed: number) {
     const totalClosedWrapper = document.querySelector(".summary-closed-tasks");
     const totalClosedNumber = totalClosedWrapper.childNodes[0] as HTMLElement;
@@ -282,29 +336,24 @@ export const layoutService = {
     membersInfo.forEach((member) => {
       const row = document.createElement("tr");
 
-      // Celula com a imagem do membro
       const memberImageCell = document.createElement("td");
       memberImageCell.innerHTML = `<img src="${member.img}" alt="${member.member}" title="${member.member}" />`;
       row.appendChild(memberImageCell);
 
-      // Celula com o nome do membro
       const memberCell = document.createElement("td");
       memberCell.textContent = `${member.member}: `;
       row.appendChild(memberCell);
 
-      // Celula com as horas fechadas / atribuídas
       const hoursCell = document.createElement("td");
       hoursCell.textContent = `${member.closedHours}H / ${member.assignedHours}H`;
       row.appendChild(hoursCell);
 
-      // Celula com as tarefas e horas por dia
       const tasksCell = document.createElement("td");
       tasksCell.textContent = `(${member.closedTasks.toString()} / ${member.assignedTasks.toString()} tasks) | ${
         member.hoursPerDay
       }H Day`;
       row.appendChild(tasksCell);
 
-      // Adiciona a linha na tabela
       table.appendChild(row);
     });
   },

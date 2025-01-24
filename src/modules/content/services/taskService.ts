@@ -1,7 +1,17 @@
 import { Task, TotalTaskInfo } from "../../../interfaces/Task";
 import { sumTimes } from "../helpers/time/sumTimes";
 
+/**
+ * Serviço para gerenciar e processar tasks.
+ */
 export const taskService = {
+
+  /**
+   * Extrai as informações de uma task a partir de um elemento HTML.
+   *
+   * @param { Element } item - O elemento HTML que representa uma task.
+   * @return { Task } As informações da task extraídas.
+   */
   getTaskInfo(item: Element): Task {
     const str = item.querySelector<HTMLElement>(".card-title").innerText || "";
     const isClosed = !!item.querySelector(".card-tag[title=closed]");
@@ -37,6 +47,12 @@ export const taskService = {
     };
   },
 
+  /**
+   * Recupera todas as tasks a partir de um documento HTML.
+   *
+   * @param { Element } document - O documento HTML contendo as tasks.
+   * @return { Task[] } Um array de tasks.
+   */
   getTasks(document: Element): Task[] {
     try {
       const tasks: Task[] = [];
@@ -50,6 +66,13 @@ export const taskService = {
     }
   },
 
+
+  /**
+   * Calcula informações totais sobre uma lista de tasks.
+   *
+   * @param {Task[]} tasks - A lista de tasks a ser processada.
+   * @return {TotalTaskInfo} As informações totais das tasks.
+   */
   getTotalTasksInfos(tasks: Task[]): TotalTaskInfo {
     let totalHR = "0.00";
     let totalClosedHR = "0.00";
@@ -86,8 +109,15 @@ export const taskService = {
     };
   },
 
+
+  /**
+   * Calcula o total de tasks agrupadas por tipo.
+   *
+   * @param {Record<string, number>} totalTypes - Um objeto contendo a quantidade de tasks por tipo.
+   * @return { string } A string com o total de tasks, incluindo o detalhamento por tipo.
+   */
   getTotalTasksByType(totalTypes: Record<string, number>) {
-    let totalTasks;
+    let totalTasks: string;
     const totalOfTotalTypes = Object.values(totalTypes).reduce(
       (acc, curr) => acc + curr,
       0
