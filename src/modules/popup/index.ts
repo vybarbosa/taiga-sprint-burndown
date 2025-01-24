@@ -1,4 +1,4 @@
-import { renderMembersInfos } from "./helpers";
+import { fetchDataAndCopyToClipboard } from "./helpers/fetchDataAndCopyToClipboard";
 
 function activateCopyButton() {
   if (document.getElementById("copyData")) {
@@ -28,12 +28,10 @@ document.addEventListener("DOMContentLoaded", () => {
       duration,
       totalHR,
       totalClosedHR,
-      totalTypes,
       totalClosed,
       totalNew,
       remainingHours,
       totalPercent,
-      storys,
       aggregatedMembersInfo,
       totalNewHR,
       totalTasks,
@@ -42,19 +40,20 @@ document.addEventListener("DOMContentLoaded", () => {
       (
         document.getElementById("copyData") as HTMLInputElement
       ).addEventListener("click", () => {
-        const allFields = 
-      `Data: ${new Date().toLocaleDateString("pt-br")}\n`+
-      `SQUAD: ${squadName}\n`+
-      `DURATION: ${duration}\n`+
-      `TOTAL (HR): ${totalClosedHR} / ${totalHR} (${remainingHours} - ${totalPercent}%)\n`+
-      `TOTAL NEW (HR): ${totalNewHR}\n`+
-      `TOTAL (TASKS): ${totalTasks}\n`+
-      `QTD. CLOSED: ${totalClosed}\n`+
-      `QTD. NEW: ${totalNew}\n\n`+
-      `STORIES:\n${totalStories}\n`+
-      `PRODUTIVIDADE DA SQUAD: \n${renderMembersInfos(aggregatedMembersInfo)}`
-    ;
-        navigator.clipboard.writeText(allFields);
+        fetchDataAndCopyToClipboard({
+          squadName,
+          duration,
+          totalHR,
+          totalClosedHR,
+          totalClosed,
+          totalNew,
+          remainingHours,
+          totalPercent,
+          aggregatedMembersInfo,
+          totalNewHR,
+          totalTasks,
+          totalStories,
+        });
       });
       activateCopyButton();
     }

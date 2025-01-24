@@ -1,13 +1,4 @@
-export function getDuration() {
-  try {
-    const duration = (
-      document.querySelector(".taskboard-header h1 .date") as HTMLElement
-    ).innerText;
-    return duration;
-  } catch (error) {
-    return "NOT FOUND";
-  }
-}
+import { getDuration } from "./getDuration";
 
 export function getDifferenceInDaysFromToday() {
   const duration = getDuration();
@@ -21,7 +12,11 @@ export function getDifferenceInDaysFromToday() {
 
   let workingDays = 0;
 
-  for (let date = new Date(startDate); date <= limitDate; date.setDate(date.getDate() + 1)) {
+  for (
+    let date = new Date(startDate);
+    date <= limitDate;
+    date.setDate(date.getDate() + 1)
+  ) {
     const dayOfWeek = date.getDay();
     if (dayOfWeek !== 0 && dayOfWeek !== 6) {
       workingDays++;

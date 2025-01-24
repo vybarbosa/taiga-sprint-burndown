@@ -1,4 +1,4 @@
-import { MemberTaskInfo } from "../interfaces";
+import { MemberTaskInfo } from "../../../interfaces/Member";
 
 export function renderMembersInfos(membersInfos: MemberTaskInfo[]) {
   return membersInfos.reduce((acc, curr) => {
