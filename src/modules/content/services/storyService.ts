@@ -30,15 +30,17 @@ export const storyService = {
       const storyData = document.createElement("ul");
       storyData.className = "sprint-burndown__stories-info";
       storyData.id = "stories";
-      storyData.innerHTML = `
-        <li>TOTAL (HR): ${checkNaN(story?.totalHR)} (${checkNaN(
-        story?.remainingHours
-      )} - ${checkNaN(story?.totalPercent)}%)</li>
-        <li>CLOSED (HR): ${checkNaN(story?.totalClosedHR)}</li>
-        <li>NEW CLOSED (HR): ${checkNaN(story?.totalNewHR)}</li>
-        <li>TASKS (QTD): ${story?.tasks.length} (CLOSED: ${
-        story?.totalClosed
-      } / NEW: ${story?.totalNew})</li>`;
+      storyData.innerHTML = `<li>TOTAL (HR): ${checkNaN(
+        story.totalHR
+      )} (${checkNaN(story.remainingHours)} - ${checkNaN(
+        story.totalPercent
+      )}%)</li>\n<li>CLOSED (HR): ${checkNaN(
+        story.totalClosedHR
+      )}</li>\n</li>NEW CLOSED (HR): ${checkNaN(
+        story.totalNewHR
+      )}</li>\n<li>TASKS (QTD): ${story.tasks.length} (CLOSED: ${
+        story.totalClosed
+      } / NEW: ${story.totalNew})</li>`;
       title.appendChild(storyData);
       totalStories +=
         story?.name.replace("\n", " ") + "\n" + storyData.innerText + "\n\n";
@@ -102,13 +104,12 @@ export const storyService = {
     }
   },
 
-
   /**
    * Soma as métricas de várias stories.
-   * 
-   * Esta função calcula os totais de horas, tarefas e tipos de tarefas 
+   *
+   * Esta função calcula os totais de horas, tarefas e tipos de tarefas
    * a partir de uma lista de stories.
-   * 
+   *
    * @param { Story[] } stories - Lista de stories para cálculo de métricas totais.
    * @return { SumStories } Um objeto contendo os totais agregados das stories.
    */
@@ -127,7 +128,8 @@ export const storyService = {
       totalNew += story.totalNew;
       totalNewHR = sumTimes(totalNewHR, story.totalNewHR);
       Object.keys(story.totalTypes).forEach((type) => {
-        totalTypes[type] = (totalTypes[type] || 0) + Number(story.totalTypes[type]);
+        totalTypes[type] =
+          (totalTypes[type] || 0) + Number(story.totalTypes[type]);
       });
     });
 

@@ -114,18 +114,19 @@ export const taskService = {
    * Calcula o total de tasks agrupadas por tipo.
    *
    * @param {Record<string, number>} totalTypes - Um objeto contendo a quantidade de tasks por tipo.
-   * @return { string } A string com o total de tasks, incluindo o detalhamento por tipo.
+   * @return A string com o total de tasks, incluindo o detalhamento por tipo.
    */
   getTotalTasksByType(totalTypes: Record<string, number>) {
-    let totalTasks: string;
+    let totalTasks = '';
     const totalOfTotalTypes = Object.values(totalTypes).reduce(
       (acc, curr) => acc + curr,
       0
     );
+    
     totalTasks += `${totalOfTotalTypes} (${Object.entries(totalTypes)
-      .map(([key, value]) => `${key}: ${value}`)
-      .join(", ")})`;
-
+    .map(([key, value]) => `${key}: ${value}`)
+    .join(", ")})`;
+    
     return totalTasks;
   },
 };
