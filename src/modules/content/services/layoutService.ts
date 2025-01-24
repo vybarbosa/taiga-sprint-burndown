@@ -1,8 +1,5 @@
 import { MemberTaskInfo } from "../../../interfaces/Member";
-import { createDurationWrapper } from "../layout/duration";
-import { createQtdNewWrapper } from "../layout/qtdNew";
-import { createTotalHrWrapper } from "../layout/totalHr";
-import { createTotalNewHRWrapper } from "../layout/totalNewHr";
+import { checkNaN } from "../helpers/checkNaN";
 
 interface SummaryData {
   totalClosedHR: string;
@@ -17,7 +14,7 @@ interface SummaryData {
 }
 
 export const layoutService = {
-  clearElements(summary: HTMLDivElement) {
+  clearElements() {
     const idsToRemove = [
       "#duration",
       "#total-hr-wrapper",
@@ -35,27 +32,27 @@ export const layoutService = {
     document
       .querySelectorAll("#stories")
       .forEach((element) => element.remove());
+  },
 
-    if (summary) {
-      summary.classList.add("active");
-      const toggleAnalyticsWrapper = summary.querySelector(
-        ".stats.toggle-analytics-visibility"
-      ) as HTMLDivElement;
-      const largeSummaryWrapper = summary.querySelector(
-        ".large-summary-wrapper"
-      ) as HTMLDivElement;
-      largeSummaryWrapper.appendChild(toggleAnalyticsWrapper);
-      const classesToRemove = [
-        ".summary-stats.summary-iocaine",
-        ".summary-stats.summary-open-tasks",
-        ".points-per-role-stats",
-      ];
+  clearSummary(summary: HTMLDivElement) {
+    summary.classList.add("active");
+    const toggleAnalyticsWrapper = summary.querySelector(
+      ".stats.toggle-analytics-visibility"
+    ) as HTMLDivElement;
+    const largeSummaryWrapper = summary.querySelector(
+      ".large-summary-wrapper"
+    ) as HTMLDivElement;
+    largeSummaryWrapper.appendChild(toggleAnalyticsWrapper);
+    const classesToRemove = [
+      ".summary-stats.summary-iocaine",
+      ".summary-stats.summary-open-tasks",
+      ".points-per-role-stats",
+    ];
 
-      classesToRemove.forEach((classToRemove) => {
-        const element = document.querySelector(classToRemove);
-        if (element) element.remove();
-      });
-    }
+    classesToRemove.forEach((classToRemove) => {
+      const element = document.querySelector(classToRemove);
+      if (element) element.remove();
+    });
   },
 
   updateProgressBar(percent: string) {
@@ -95,20 +92,21 @@ export const layoutService = {
 
     if (!summary) return;
 
-    this.clearElements(summary);
+    layoutService.clearSummary(summary);
 
     const mainSummaryStats = summary.querySelector(".main-summary-stats");
 
     // Adiciona informações de resumo ao DOM
-    createTotalHrWrapper(
+    layoutService.createTotalHrWrapper(
       mainSummaryStats,
       totalClosedHR,
       totalHR,
       remainingHours
     );
-    createTotalNewHRWrapper(mainSummaryStats, totalNewHR);
-    createQtdNewWrapper(mainSummaryStats, totalNew);
-    createDurationWrapper(summary, duration);
+    layoutService.updateTotalClosedWrapper(totalClosed);
+    layoutService.createTotalNewHRWrapper(mainSummaryStats, totalNewHR);
+    layoutService.createQtdNewWrapper(mainSummaryStats, totalNew);
+    layoutService.createDurationWrapper(summary, duration);
 
     // Preenche informações de tasks e membros
     const membersAndTasksWrapper = layoutService.createMembersAndTasksWrapper(
@@ -147,6 +145,7 @@ export const layoutService = {
     const membersAndTasksWrapper = document.createElement("div");
     membersAndTasksWrapper.className =
       "sprint-burndown__members-external-wrapper";
+    membersAndTasksWrapper.id = "members-info-wrapper";
     membersAndTasksWrapper.appendChild(internalWrapper);
 
     return membersAndTasksWrapper;
@@ -179,6 +178,7 @@ export const layoutService = {
       .join("");
 
     const wrapper = document.createElement("div");
+    wrapper.id = "qtd-total";
     const totalOfTotalTypes = Object.values(totalTypes).reduce(
       (acc, curr) => acc + curr,
       0
@@ -189,6 +189,85 @@ export const layoutService = {
     wrapper.appendChild(list);
 
     return wrapper;
+  },
+
+  createTotalNewHRWrapper(mainSummaryStats: Element, totalNewHR: string) {
+    // =-=-=-=-= total New Hr =-=-=-=-=
+    const newHrWrapper = document.createElement("div");
+    newHrWrapper.className = "summary-stats";
+    newHrWrapper.id = "qtd-new-hr";
+    const newHrNumber = document.createElement("span");
+    newHrNumber.className = "number";
+    const newHrDescription = document.createElement("span");
+    newHrDescription.className = "description";
+    newHrNumber.textContent = totalNewHR;
+    newHrDescription.innerHTML = "total new<br/>(hrs)";
+    newHrWrapper.appendChild(newHrNumber);
+    newHrWrapper.appendChild(newHrDescription);
+    mainSummaryStats.insertBefore(newHrWrapper, mainSummaryStats.childNodes[7]);
+  },
+
+  createTotalHrWrapper(
+    mainSummaryStats: Element,
+    totalClosedHR: string,
+    totalHR: string,
+    remainingHours: string
+  ) {
+    // =-=-=-=-= Total Hr =-=-=-=-=
+    const totalHrWrapper = document.createElement("div");
+    totalHrWrapper.className = "summary-stats";
+    const totalHrNumber = document.createElement("span");
+    totalHrNumber.id = "total-hr";
+    totalHrWrapper.id = "total-hr-wrapper";
+    totalHrNumber.className = "number";
+    const totalHrDescription = document.createElement("span");
+    totalHrDescription.className = "description";
+    totalHrNumber.textContent = `${checkNaN(totalClosedHR)} / ${checkNaN(
+      totalHR
+    )}`;
+    totalHrDescription.innerHTML = `total hrs <br/>(${remainingHours} hrs remaining)`;
+    totalHrWrapper.appendChild(totalHrNumber);
+    totalHrWrapper.appendChild(totalHrDescription);
+    mainSummaryStats.insertBefore(
+      totalHrWrapper,
+      mainSummaryStats.childNodes[0]
+    );
+  },
+
+  createQtdNewWrapper(mainSummaryStats: Element, totalNew: number) {
+    const qtdNewWrapper = document.createElement("div");
+    qtdNewWrapper.className = "summary-stats";
+    const qtdNewNumber = document.createElement("span");
+    qtdNewWrapper.id = "qtd-new";
+    qtdNewNumber.className = "number";
+    const qtdNewDescription = document.createElement("span");
+    qtdNewDescription.className = "description";
+    qtdNewNumber.textContent = `${totalNew}`;
+    qtdNewDescription.innerHTML = "new<br/> tasks";
+    qtdNewWrapper.appendChild(qtdNewNumber);
+    qtdNewWrapper.appendChild(qtdNewDescription);
+    mainSummaryStats.insertBefore(
+      qtdNewWrapper,
+      mainSummaryStats.childNodes[7]
+    );
+  },
+
+  createDurationWrapper(summary: Element, duration: string) {
+    const durationWrapper = document.createElement("div");
+    durationWrapper.className =
+      "sprint-burndown__duration-wrapper summary-stats";
+    durationWrapper.id = "duration";
+    const durationDescription = document.createElement("span");
+    durationDescription.className = "description";
+    durationDescription.textContent = duration;
+    durationWrapper.appendChild(durationDescription);
+    summary.insertBefore(durationWrapper, summary.childNodes[0]);
+  },
+
+  updateTotalClosedWrapper(totalClosed: number) {
+    const totalClosedWrapper = document.querySelector(".summary-closed-tasks");
+    const totalClosedNumber = totalClosedWrapper.childNodes[0] as HTMLElement;
+    totalClosedNumber.innerText = `${totalClosed}`;
   },
 
   /**

@@ -10,6 +10,7 @@ import { taskService } from "./services/taskService";
 
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   if (message.action === "getData") {
+    layoutService.clearElements();
     const squadName = squadService.getSquadName();
     const duration = getDuration();
     const storys = storyService.getStories();

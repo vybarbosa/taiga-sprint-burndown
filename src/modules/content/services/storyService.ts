@@ -23,6 +23,7 @@ export const storyService = {
       );
       const storyData = document.createElement("ul");
       storyData.className = "sprint-burndown__stories-info";
+      storyData.id = "stories";
       storyData.innerHTML = `
         <li>TOTAL (HR): ${checkNaN(story?.totalHR)} (${checkNaN(
         story?.remainingHours
