@@ -35,6 +35,12 @@ export function clearOldData(
       iocaineWrapper.remove();
       openTasksWrapper.remove();
     }
+    const toggleTotalPoints = summary.querySelector(".summary-stats.toggle-points-per-role") as HTMLDivElement;
+    if (toggleTotalPoints) {
+      toggleTotalPoints.style.pointerEvents = "none";
+      const iconTotalPoints = toggleTotalPoints.querySelector("tg-svg") as HTMLDivElement;
+      iconTotalPoints.remove();
+    }
     moveUnfinishedWrapper.style.border = "none";
     completedPointsWrapper.style.border = "none";
   }
