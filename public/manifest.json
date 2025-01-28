@@ -20,8 +20,7 @@
         "${VITE_TAIGA_URL}"
       ],
       "js": [
-        "content.js",
-        "popup.js"
+        "content.js"
       ],
       "css": ["assets/index.css"]
     }
