@@ -49,7 +49,13 @@ export const layoutService = {
       ".summary-stats.summary-iocaine",
       ".summary-stats.summary-open-tasks",
       ".points-per-role-stats",
+      ".tg-svg"
     ];
+
+    const toggleTotalPoints = summary.querySelector(".summary-stats.toggle-points-per-role") as HTMLDivElement;
+    if (toggleTotalPoints) {
+      toggleTotalPoints.style.pointerEvents = "none";
+    }
 
     classesToRemove.forEach((classToRemove) => {
       const element = document.querySelector(classToRemove);

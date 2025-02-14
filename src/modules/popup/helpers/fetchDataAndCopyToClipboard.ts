@@ -18,6 +18,16 @@ import { renderMembersInfos } from "./renderMembersInfos";
  * @param totalStories - Todas as stories.
  */
 
+function copyMade() {
+  const message = document.getElementById("copyMessage");
+  if (message) {
+    message.hidden = false;
+    setTimeout(() => {
+      message.hidden = true;
+    }, 2000);
+  }
+}
+
 export function fetchDataAndCopyToClipboard({
   squadName,
   duration,
@@ -44,4 +54,5 @@ export function fetchDataAndCopyToClipboard({
     `STORIES:\n${totalStories}\n` +
     `PRODUTIVIDADE DA SQUAD: \n${renderMembersInfos(aggregatedMembersInfo)}`;
   navigator.clipboard.writeText(allFields);
+  copyMade();
 }
