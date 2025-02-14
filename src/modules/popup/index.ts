@@ -18,7 +18,7 @@ function copyMade() {
     message.hidden = false;
     setTimeout(() => {
       message.hidden = true;
-    }, 1500);
+    }, 1600);
   }
 }
 
