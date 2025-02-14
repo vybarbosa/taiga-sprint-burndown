@@ -80,6 +80,14 @@ body {
   }
 }
 
+#copyContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
 #copyData {
   cursor: pointer;
   display: flex;
@@ -103,6 +111,20 @@ body {
   img {
     width: 18px;
   }
+}
+
+#copyData:hover {
+  background-color: #0060a5;
+}
+
+#copyMessage {
+  color: green;
+  display: block; 
+  visibility: hidden;
+}
+
+#copyMessage:not([hidden]) {
+  visibility: visible;
 }
 
 #error {

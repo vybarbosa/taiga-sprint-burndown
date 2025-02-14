@@ -12,6 +12,16 @@ function activateCopyButton() {
   }
 }
 
+function copyMade() {
+  const message = document.getElementById("copyMessage");
+  if (message) {
+    message.hidden = false;
+    setTimeout(() => {
+      message.hidden = true;
+    }, 1500);
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     const currentUrl = tabs[0].url;
@@ -59,6 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
           totalTasks,
           totalStories,
         });
+        copyMade();
       });
       activateCopyButton();
     }
