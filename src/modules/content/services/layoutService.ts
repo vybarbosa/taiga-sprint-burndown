@@ -30,8 +30,6 @@ export const layoutService = {
       .querySelectorAll("#stories")
       .forEach((element) => element.remove());
 
-    document
-      .querySelector("tg-svg").remove();
   },
 
 
@@ -58,6 +56,7 @@ export const layoutService = {
       ".summary-stats.summary-iocaine",
       ".summary-stats.summary-open-tasks",
       ".points-per-role-stats",
+      ".taskboard-table-options-end",
     ];
 
     if (toggleTotalPoints) {
@@ -93,7 +92,16 @@ export const layoutService = {
     }
   },
 
-
+  setViewType() {
+    const labels = document.querySelectorAll(".board-zoom label");
+  
+    labels.forEach(label => {
+      if (label.getAttribute("ng-attr-title") === "{{ 'ZOOM.ZOOM-3' | translate }}") {
+        (label as HTMLElement).click();
+      }
+    });
+  },
+  
   /**
    * Renderiza todas as informações da extensão da interface.
    * @param summaryData Objeto contendo os dados necessários para exibição das informações.
